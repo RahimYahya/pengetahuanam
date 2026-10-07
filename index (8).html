@@ -1,0 +1,2371 @@
+<!DOCTYPE html>
+
+<html lang="ms">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Pentaksiran Kemasukan Sekolah Khusus (PKSK) - Pengetahuan Am</title>
+
+    <!-- Tailwind CSS CDN -->
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Font Awesome Icons -->
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Google Fonts Inter -->
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script>
+
+        tailwind.config = {
+
+            theme: {
+
+                extend: {
+
+                    fontFamily: {
+
+                        sans: ['Inter', 'sans-serif'],
+
+                    },
+
+                    colors: {
+
+                        brand: {
+
+                            50: '#f0f9ff',
+
+                            100: '#e0f2fe',
+
+                            500: '#0284c7',
+
+                            600: '#0284c7',
+
+                            700: '#0369a1',
+
+                            800: '#075985',
+
+                            900: '#0c4a6e',
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
+
+    </script>
+
+    <style>
+
+        .option-btn {
+
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+        }
+
+        .option-btn:hover:not(:disabled) {
+
+            transform: translateY(-2px);
+
+        }
+
+        @keyframes pulse-subtle {
+
+            0%, 100% { transform: scale(1); }
+
+            50% { transform: scale(1.03); }
+
+        }
+
+        .animate-pulse-subtle {
+
+            animation: pulse-subtle 2s infinite;
+
+        }
+
+        @keyframes pop-in {
+
+            0% { opacity: 0; transform: scale(0.95); }
+
+            100% { opacity: 1; transform: scale(1); }
+
+        }
+
+        .animate-pop-in {
+
+            animation: pop-in 0.3s ease-out forwards;
+
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+
+            width: 6px;
+
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-track {
+
+            background: #f1f5f9;
+
+            border-radius: 8px;
+
+        }
+
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+
+            background: #cbd5e1;
+
+            border-radius: 8px;
+
+        }
+
+    </style>
+
+</head>
+
+<body class="bg-slate-50 text-slate-800 font-sans min-h-screen flex flex-col justify-between selection:bg-sky-500 selection:text-white">
+
+
+
+    <!-- Header Utama -->
+
+    <header class="bg-gradient-to-r from-blue-900 via-indigo-900 to-sky-900 text-white shadow-lg sticky top-0 z-30">
+
+        <div class="max-w-6xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+
+            <div class="flex items-center gap-3">
+
+                <div class="bg-sky-500/20 p-2.5 rounded-xl border border-sky-400/30 flex items-center justify-center">
+
+                    <i class="fa-solid font-bold fa-graduation-cap text-2xl text-sky-300"></i>
+
+                </div>
+
+                <div>
+
+                    <h1 class="font-extrabold text-lg sm:text-xl tracking-tight leading-tight">PKSK: Pengetahuan Am</h1>
+
+                    <p class="text-xs text-sky-200">Pentaksiran Kemasukan Sekolah Khusus • 30 Soalan Interaktif</p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Kawalan Audio & Status Top Bar -->
+
+            <div class="flex items-center gap-3 ml-auto sm:ml-0">
+
+                <button id="soundToggleBtn" onclick="toggleSound()" class="flex items-center gap-2 bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded-lg border border-white/20 text-xs font-medium transition" title="Pasang/Muted Bunyi">
+
+                    <i id="soundIcon" class="fa-solid fa-volume-high text-sky-300"></i>
+
+                    <span id="soundText" class="hidden sm:inline">Bunyi: On</span>
+
+                </button>
+
+
+
+                <div class="bg-white/10 px-3 py-1.5 rounded-lg border border-white/20 flex items-center gap-2 text-xs font-semibold">
+
+                    <i class="fa-regular fa-clock text-yellow-300"></i>
+
+                    <span id="timerDisplay">00:00</span>
+
+                </div>
+
+
+
+                <button onclick="toggleGridModal()" class="bg-sky-500 hover:bg-sky-600 text-white px-3 py-1.5 rounded-lg font-medium text-xs flex items-center gap-1.5 shadow transition">
+
+                    <i class="fa-solid fa-th-large"></i>
+
+                    <span class="hidden sm:inline">Senarai Soalan</span>
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+
+    <!-- Content Utama -->
+
+    <main class="max-w-4xl mx-auto px-4 py-6 w-full flex-grow">
+
+
+
+        <!-- Bar Kemajuan & Statistik Ringkas -->
+
+        <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/80 mb-6">
+
+            <div class="flex justify-between items-center text-xs font-bold text-slate-500 mb-2">
+
+                <span class="flex items-center gap-1.5">
+
+                    <i class="fa-solid fa-list-check text-sky-600"></i>
+
+                    SOALAN <span id="currentQNumText" class="text-sky-700 font-extrabold text-sm">1</span> DIPADA <span class="text-slate-700">30</span>
+
+                </span>
+
+                <span class="bg-sky-100 text-sky-800 px-2.5 py-1 rounded-full font-semibold">
+
+                    Markah: <span id="liveScoreText" class="text-sky-900 font-bold">0</span> / 30
+
+                </span>
+
+            </div>
+
+            <!-- Progress Bar -->
+
+            <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
+
+                <div id="progressBar" class="bg-gradient-to-r from-sky-500 to-indigo-600 h-full w-0 transition-all duration-300 rounded-full"></div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- Kad Soalan Utama -->
+
+        <div id="quizCard" class="bg-white rounded-2xl shadow-md border border-slate-200/80 overflow-hidden relative transition-all">
+
+            <!-- Header Soalan & Kategori -->
+
+            <div class="bg-slate-50 px-6 py-3 border-b border-slate-100 flex justify-between items-center flex-wrap gap-2">
+
+                <span id="categoryBadge" class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-indigo-50 text-indigo-700 border border-indigo-100">
+
+                    <i class="fa-solid fa-tag text-indigo-500"></i> Sejarah & Pentadbiran
+
+                </span>
+
+
+
+                <div id="attemptBadge" class="inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">
+
+                    <i class="fa-solid fa-rotate-right text-amber-500"></i> Percubaan 1 daripada 2
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Teks Soalan -->
+
+            <div class="p-6 sm:p-8">
+
+                <h2 id="questionText" class="text-slate-800 text-lg sm:text-xl font-bold leading-relaxed mb-6">
+
+                    Memuatkan soalan...
+
+                </h2>
+
+
+
+                <!-- Pilihan Jawapan A, B, C, D -->
+
+                <div id="optionsContainer" class="grid grid-cols-1 gap-3.5 mb-6">
+
+                    <!-- Dinjana melalui JS -->
+
+                </div>
+
+
+
+                <!-- Banner Maklum Balas (Jawapan Betul / Peluang Kedua / Penerangan) -->
+
+                <div id="feedbackBox" class="hidden rounded-xl p-4 sm:p-5 border animate-pop-in mb-4">
+
+                    <div class="flex items-start gap-3">
+
+                        <div id="feedbackIconBox" class="p-2 rounded-lg shrink-0 mt-0.5">
+
+                            <i id="feedbackIcon" class="fa-solid text-xl"></i>
+
+                        </div>
+
+                        <div class="flex-grow">
+
+                            <h3 id="feedbackTitle" class="font-bold text-base mb-1"></h3>
+
+                            <p id="feedbackMessage" class="text-xs sm:text-sm leading-relaxed"></p>
+
+                            <!-- Pencerahan / Explanation -->
+
+                            <div id="explanationContainer" class="hidden mt-3 pt-3 border-t border-slate-200/60 text-xs sm:text-sm">
+
+                                <span class="font-semibold text-slate-700 flex items-center gap-1 mb-1">
+
+                                    <i class="fa-solid fa-lightbulb text-amber-500"></i> Nota Pencerahan PKSK:
+
+                                </span>
+
+                                <p id="explanationText" class="text-slate-600 bg-white/70 p-2.5 rounded-lg border border-slate-200/50"></p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Butang Kawalan Soalan -->
+
+                <div class="flex justify-between items-center pt-2 flex-wrap gap-3">
+
+                    <button id="prevBtn" onclick="navigateQuestion(-1)" class="px-4 py-2.5 rounded-xl border border-slate-300 text-slate-700 font-semibold text-xs sm:text-sm hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed transition flex items-center gap-2">
+
+                        <i class="fa-solid fa-chevron-left"></i> Soalan Sebelum
+
+                    </button>
+
+
+
+                    <div class="flex items-center gap-2">
+
+                        <button id="retryBtn" onclick="retryCurrentQuestion()" class="hidden px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-600 text-white font-semibold text-xs sm:text-sm shadow-md transition flex items-center gap-2">
+
+                            <i class="fa-solid fa-arrow-rotate-left"></i> Cuba Lagi Sekali
+
+                        </button>
+
+
+
+                        <button id="nextBtn" onclick="navigateQuestion(1)" class="px-5 py-2.5 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-semibold text-xs sm:text-sm shadow-md transition flex items-center gap-2">
+
+                            Soalan Seterusnya <i class="fa-solid fa-chevron-right"></i>
+
+                        </button>
+
+
+
+                        <button id="finishBtn" onclick="showResults()" class="hidden px-5 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs sm:text-sm shadow-lg transition flex items-center gap-2 animate-pulse-subtle">
+
+                            <i class="fa-solid fa-flag-checkered"></i> Tamatkan & Lihat Keputusan
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- Halaman Keputusan (Sembunyi secara lalai) -->
+
+        <div id="resultsContainer" class="hidden bg-white rounded-2xl shadow-xl border border-slate-200 overflow-hidden p-6 sm:p-10 animate-pop-in">
+
+            <div class="text-center max-w-xl mx-auto mb-8">
+
+                <div class="w-20 h-20 bg-gradient-to-tr from-sky-500 to-indigo-600 rounded-3xl mx-auto flex items-center justify-center text-white text-3xl shadow-lg mb-4">
+
+                    <i class="fa-solid fa-trophy text-yellow-300"></i>
+
+                </div>
+
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-800 mb-2">Tahniah! Anda Telah Tamat</h2>
+
+                <p class="text-slate-600 text-sm">Berikut merupakan prestasi anda dalam Ujian Pentaksiran Pengetahuan Am PKSK.</p>
+
+            </div>
+
+
+
+            <!-- Kad Skor Utama -->
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+
+                <div class="bg-sky-50 rounded-2xl p-4 text-center border border-sky-100">
+
+                    <p class="text-xs font-semibold text-sky-600 uppercase tracking-wider mb-1">Markah Keseluruhan</p>
+
+                    <p class="text-3xl font-black text-sky-900"><span id="finalScore">0</span> / 30</p>
+
+                </div>
+
+                <div class="bg-indigo-50 rounded-2xl p-4 text-center border border-indigo-100">
+
+                    <p class="text-xs font-semibold text-indigo-600 uppercase tracking-wider mb-1">Peratusan Kejayaan</p>
+
+                    <p class="text-3xl font-black text-indigo-900"><span id="finalPercentage">0</span>%</p>
+
+                </div>
+
+                <div class="bg-emerald-50 rounded-2xl p-4 text-center border border-emerald-100">
+
+                    <p class="text-xs font-semibold text-emerald-600 uppercase tracking-wider mb-1">Gred Prestasi</p>
+
+                    <p id="finalGrade" class="text-2xl font-extrabold text-emerald-800">Cemerlang</p>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Analisis Ringkas Percubaan -->
+
+            <div class="bg-slate-50 rounded-2xl p-5 border border-slate-200 mb-8">
+
+                <h4 class="font-bold text-slate-800 text-sm mb-3 flex items-center gap-2">
+
+                    <i class="fa-solid fa-chart-pie text-sky-600"></i> Analisis Percubaan Soalan:
+
+                </h4>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+
+                    <div class="bg-white p-3 rounded-xl border border-slate-200 flex items-center justify-between">
+
+                        <span class="text-slate-600 flex items-center gap-1.5"><i class="fa-solid fa-circle-check text-emerald-500"></i> Betul Percubaan Pertama:</span>
+
+                        <span id="statFirstTry" class="font-bold text-slate-800 text-sm">0</span>
+
+                    </div>
+
+                    <div class="bg-white p-3 rounded-xl border border-slate-200 flex items-center justify-between">
+
+                        <span class="text-slate-600 flex items-center gap-1.5"><i class="fa-solid fa-clock-rotate-left text-amber-500"></i> Betul Percubaan Kedua:</span>
+
+                        <span id="statSecondTry" class="font-bold text-slate-800 text-sm">0</span>
+
+                    </div>
+
+                    <div class="bg-white p-3 rounded-xl border border-slate-200 flex items-center justify-between">
+
+                        <span class="text-slate-600 flex items-center gap-1.5"><i class="fa-solid fa-circle-xmark text-rose-500"></i> Perlu Ulang Kaji:</span>
+
+                        <span id="statFailed" class="font-bold text-slate-800 text-sm">0</span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- Butang Tindakan Keputusan -->
+
+            <div class="flex flex-wrap items-center justify-center gap-4">
+
+                <button onclick="restartQuiz()" class="bg-sky-600 hover:bg-sky-700 text-white font-bold px-6 py-3 rounded-xl shadow-md transition flex items-center gap-2 text-sm">
+
+                    <i class="fa-solid fa-rotate-right"></i> Cuba Kuiz Semula
+
+                </button>
+
+                <button onclick="toggleGridModal()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-6 py-3 rounded-xl transition flex items-center gap-2 text-sm">
+
+                    <i class="fa-solid fa-list-ol"></i> Semak Semua Soalan
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+
+    </main>
+
+
+
+    <!-- Modal Senarai Soalan (Grid 1 - 30) -->
+
+    <div id="gridModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+
+        <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl overflow-hidden animate-pop-in">
+
+            <div class="p-5 bg-slate-900 text-white flex justify-between items-center">
+
+                <div class="flex items-center gap-2.5">
+
+                    <i class="fa-solid fa-th text-sky-400"></i>
+
+                    <h3 class="font-bold text-base">Peta Navigasi Soalan (1 - 30)</h3>
+
+                </div>
+
+                <button onclick="toggleGridModal()" class="text-slate-400 hover:text-white text-lg px-2">
+
+                    <i class="fa-solid fa-xmark"></i>
+
+                </button>
+
+            </div>
+
+
+
+            <div class="p-6 overflow-y-auto custom-scrollbar flex-grow">
+
+                <!-- Petunjuk Warna -->
+
+                <div class="flex flex-wrap gap-4 text-xs font-medium text-slate-600 mb-5 p-3 bg-slate-50 rounded-xl border border-slate-200">
+
+                    <div class="flex items-center gap-1.5"><span class="w-3.5 h-3.5 bg-emerald-500 rounded-full inline-block"></span> Betul Percubaan 1</div>
+
+                    <div class="flex items-center gap-1.5"><span class="w-3.5 h-3.5 bg-amber-500 rounded-full inline-block"></span> Betul Percubaan 2</div>
+
+                    <div class="flex items-center gap-1.5"><span class="w-3.5 h-3.5 bg-rose-500 rounded-full inline-block"></span> Salah</div>
+
+                    <div class="flex items-center gap-1.5"><span class="w-3.5 h-3.5 bg-slate-200 border border-slate-300 rounded-full inline-block"></span> Belum Dijawab</div>
+
+                </div>
+
+
+
+                <!-- Grid Soalan 1-30 -->
+
+                <div id="questionGridContainer" class="grid grid-cols-5 sm:grid-cols-6 gap-3">
+
+                    <!-- Dinjana via JS -->
+
+                </div>
+
+            </div>
+
+
+
+            <div class="p-4 bg-slate-50 border-t border-slate-200 text-right">
+
+                <button onclick="toggleGridModal()" class="bg-slate-800 text-white px-5 py-2 rounded-xl text-xs font-semibold hover:bg-slate-700 transition">
+
+                    Tutup
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- Footer -->
+
+    <footer class="bg-slate-900 text-slate-400 text-xs text-center py-4 border-t border-slate-800 mt-8">
+
+        <p>© Modul Pentaksiran Kemasukan Sekolah Khusus (PKSK) • Soalan Pengetahuan Am Interaktif</p>
+
+    </footer>
+
+
+
+    <script>
+
+        /* ==========================================================================
+
+           MODUL AUDIO SYNTHESIS (Web Audio API - Tanpa Fail Luar)
+
+           ========================================================================== */
+
+        class SoundEffects {
+
+            constructor() {
+
+                this.ctx = null;
+
+                this.enabled = true;
+
+            }
+
+
+
+            init() {
+
+                if (!this.ctx) {
+
+                    const AudioContext = window.AudioContext || window.webkitAudioContext;
+
+                    if (AudioContext) {
+
+                        this.ctx = new AudioContext();
+
+                    }
+
+                }
+
+                if (this.ctx && this.ctx.state === 'suspended') {
+
+                    this.ctx.resume();
+
+                }
+
+            }
+
+
+
+            // Bunyi Tet / Buzz (Jawapan Salah)
+
+            playBuzz() {
+
+                if (!this.enabled) return;
+
+                this.init();
+
+                if (!this.ctx) return;
+
+
+
+                const now = this.ctx.currentTime;
+
+                // Osilator Dwi-Nada Rendah (Dissonant Buzz)
+
+                const osc1 = this.ctx.createOscillator();
+
+                const osc2 = this.ctx.createOscillator();
+
+                const gain = this.ctx.createGain();
+
+
+
+                osc1.type = 'sawtooth';
+
+                osc2.type = 'square';
+
+
+
+                osc1.frequency.setValueAtTime(160, now); // 160Hz
+
+                osc2.frequency.setValueAtTime(110, now); // 110Hz
+
+
+
+                gain.gain.setValueAtTime(0.3, now);
+
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.45);
+
+
+
+                osc1.connect(gain);
+
+                osc2.connect(gain);
+
+                gain.connect(this.ctx.destination);
+
+
+
+                osc1.start(now);
+
+                osc2.start(now);
+
+                osc1.stop(now + 0.45);
+
+                osc2.stop(now + 0.45);
+
+            }
+
+
+
+            // Bunyi Tepukan Meriah / Applause (Jawapan Betul)
+
+            playApplause() {
+
+                if (!this.enabled) return;
+
+                this.init();
+
+                if (!this.ctx) return;
+
+
+
+                const duration = 1.6;
+
+                const bufferSize = this.ctx.sampleRate * duration;
+
+                const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
+
+                const data = buffer.getChannelData(0);
+
+
+
+                // Jana White Noise dengan Modulasi Tepukan & Sorakan
+
+                for (let i = 0; i < bufferSize; i++) {
+
+                    data[i] = Math.random() * 2 - 1;
+
+                }
+
+
+
+                const noise = this.ctx.createBufferSource();
+
+                noise.buffer = buffer;
+
+
+
+                // Bandpass Filter untuk meniru bunyi tepukan tangan manusia
+
+                const filter = this.ctx.createBiquadFilter();
+
+                filter.type = 'bandpass';
+
+                filter.frequency.value = 1200;
+
+                filter.Q.value = 1.2;
+
+
+
+                const gain = this.ctx.createGain();
+
+                const now = this.ctx.currentTime;
+
+
+
+                // Sampul Keuntungan (Envelope)
+
+                gain.gain.setValueAtTime(0.01, now);
+
+                gain.gain.linearRampToValueAtTime(0.4, now + 0.2);
+
+                gain.gain.exponentialRampToValueAtTime(0.01, now + duration);
+
+
+
+                noise.connect(filter);
+
+                filter.connect(gain);
+
+                gain.connect(this.ctx.destination);
+
+
+
+                noise.start(now);
+
+                // Tambah nada 'Cheer' ceria di latar belakang
+
+                const cheerOsc = this.ctx.createOscillator();
+
+                const cheerGain = this.ctx.createGain();
+
+
+
+                cheerOsc.type = 'sine';
+
+                cheerOsc.frequency.setValueAtTime(523.25, now); // C5
+
+                cheerOsc.frequency.exponentialRampToValueAtTime(659.25, now + 0.3); // E5
+
+                cheerOsc.frequency.exponentialRampToValueAtTime(783.99, now + 0.6); // G5
+
+
+
+                cheerGain.gain.setValueAtTime(0.15, now);
+
+                cheerGain.gain.exponentialRampToValueAtTime(0.01, now + 1.2);
+
+
+
+                cheerOsc.connect(cheerGain);
+
+                cheerGain.connect(this.ctx.destination);
+
+
+
+                cheerOsc.start(now);
+
+                cheerOsc.stop(now + 1.2);
+
+            }
+
+        }
+
+
+
+        const soundFX = new SoundEffects();
+
+
+
+        /* ==========================================================================
+
+           BANK 30 SOALAN PENGETAHUAN AM PKSK
+
+           ========================================================================== */
+
+        const pkskQuestions = [
+
+            {
+
+                id: 1,
+
+                category: "Sejarah & Pentadbiran",
+
+                question: "Apakah nama Bapa Kemerdekaan Malaysia yang telah melaungkan perkataan 'Merdeka' sebanyak 7 kali di Stadium Merdeka pada 31 Ogos 1957?",
+
+                options: [
+
+                    "Tun Abdul Razak bin Dato' Hussein",
+
+                    "Tunku Abdul Rahman Putra Al-Haj",
+
+                    "Tun Hussein bin Dato' Onn",
+
+                    "Tun Dr. Mahathir Mohamad"
+
+                ],
+
+                correct: 1,
+
+                explanation: "Tunku Abdul Rahman Putra Al-Haj ialah Perdana Menteri Malaysia yang pertama dan digelar Bapa Kemerdekaan atas jasa beliau mengetuai rombongan kemerdekaan ke London."
+
+            },
+
+            {
+
+                id: 2,
+
+                category: "Sejarah & Pentadbiran",
+
+                question: "Rukun Negara telah diisytiharkan pada 31 Ogos 1970 berikutan peristiwa 13 Mei 1969. Apakah prinsip ketiga dalam Rukun Negara?",
+
+                options: [
+
+                    "Kesetiaan kepada Raja dan Negara",
+
+                    "Kedaulatan Undang-Undang",
+
+                    "Keluhuran Perlembagaan",
+
+                    "Kesopanan dan Kesusilaan"
+
+                ],
+
+                correct: 2,
+
+                explanation: "Prinsip Rukun Negara mengikut urutan: (1) Kepercayaan kepada Tuhan, (2) Kesetiaan kepada Raja dan Negara, (3) Keluhuran Perlembagaan, (4) Kedaulatan Undang-Undang, (5) Kesopanan dan Kesusilaan."
+
+            },
+
+            {
+
+                id: 3,
+
+                category: "Kebudayaan & Warisan",
+
+                question: "Bunga Raya (Hibiscus rosa-sinensis) telah dipilih sebagai Bunga Kebangsaan Malaysia pada tahun 1960. Apakah simbolik bagi 5 kelopak Bunga Raya?",
+
+                options: [
+
+                    "Lima kaum utama di Malaysia",
+
+                    "Lima negeri terbesar di Malaysia",
+
+                    "Lima prinsip Rukun Negara",
+
+                    "Lima rukun Islam"
+
+                ],
+
+                correct: 2,
+
+                explanation: "Lima kelopak Bunga Raya melambangkan lima prinsip Rukun Negara yang menjadi teras perpaduan dan keharmonian rakyat Malaysia."
+
+            },
+
+            {
+
+                id: 4,
+
+                category: "Geografi & Alam Sekitar",
+
+                question: "Apakah nama gunung tertinggi di Malaysia dan juga merupakan puncak tertinggi di Pulau Borneo?",
+
+                options: [
+
+                    "Gunung Tahan",
+
+                    "Gunung Kinabalu",
+
+                    "Gunung Korbu",
+
+                    "Gunung Murud"
+
+                ],
+
+                correct: 1,
+
+                explanation: "Gunung Kinabalu terletak di Sabah dengan ketinggian 4,095 meter di atas aras laut dan diiktiraf sebagai Tapak Warisan Dunia UNESCO."
+
+            },
+
+            {
+
+                id: 5,
+
+                category: "Sains & Teknologi",
+
+                question: "Satelit komunikasi pertama milik Malaysia yang dilancarkan ke angkasa lepas pada tahun 1996 dikenali sebagai...",
+
+                options: [
+
+                    "MEASAT-1",
+
+                    "TiungSAT-1",
+
+                    "RazakSAT",
+
+                    "ANGKASA-1"
+
+                ],
+
+                correct: 0,
+
+                explanation: "MEASAT-1 (Malaysia East Asia Satellite) dilancarkan pada 13 Januari 1996, menandakan permulaan era satelit komunikasi negara."
+
+            },
+
+            {
+
+                id: 6,
+
+                category: "Isu Semasa & Pentadbiran",
+
+                question: "Pusat Pentadbiran Kerajaan Persekutuan Malaysia yang direkabentuk sebagai bandar pintar dalam taman terletak di...",
+
+                options: [
+
+                    "Cyberjaya",
+
+                    "Kuala Lumpur",
+
+                    "Putrajaya",
+
+                    "Shah Alam"
+
+                ],
+
+                correct: 2,
+
+                explanation: "Putrajaya mula dibangunkan pada tahun 1995 dan menjadi Pusat Pentadbiran Kerajaan Persekutuan menggantikan Kuala Lumpur."
+
+            },
+
+            {
+
+                id: 7,
+
+                category: "Sains & Alam Sekitar",
+
+                question: "Planet manakah dalam Sistem Suria yang dikenali sebagai 'Planet Merah' disebabkan oleh kandungan besi oksida pada permukaannya?",
+
+                options: [
+
+                    "Utarid",
+
+                    "Zuhrah",
+
+                    "Marikh",
+
+                    "Musytari"
+
+                ],
+
+                correct: 2,
+
+                explanation: "Marikh kelihatan berwarna kemerah-merahan dari angkasa disebabkan oleh debu besi oksida (karat) yang melimpah di permukaannya."
+
+            },
+
+            {
+
+                id: 8,
+
+                category: "Sukan & Kebudayaan",
+
+                question: "Pemain badminton legenda negara yang pernah memegang kedudukan nombor 1 dunia selama 349 minggu dan memenangi 3 pingat perak Sukan Olimpik ialah...",
+
+                options: [
+
+                    "Datuk Misbun Sidek",
+
+                    "Datuk Lee Chong Wei",
+
+                    "Lee Zii Jia",
+
+                    "Razif Sidek"
+
+                ],
+
+                correct: 1,
+
+                explanation: "Datuk Lee Chong Wei ialah ikon sukan negara yang memenangi pingat perak Olimpik pada tahun 2008, 2012, dan 2016."
+
+            },
+
+            {
+
+                id: 9,
+
+                category: "Sejarah & Pentadbiran",
+
+                question: "Bendera Malaysia yang mengandungi 14 jalur merah dan putih serta bulan bintang berwarna kuning secara rasmi dinamakan sebagai...",
+
+                options: [
+
+                    "Jalur Gemilang",
+
+                    "Megah Gemilang",
+
+                    "Jalur Merdeka",
+
+                    "Bintang Gemilang"
+
+                ],
+
+                correct: 0,
+
+                explanation: "Nama 'Jalur Gemilang' diisytiharkan oleh Perdana Menteri Tun Dr. Mahathir Mohamad pada malam 31 Ogos 1997 sempena Hari Kemerdekaan ke-40."
+
+            },
+
+            {
+
+                id: 10,
+
+                category: "Sains & Alam Sekitar",
+
+                question: "Apakah nama proses di mana tumbuhan hijau membuat makanan sendiri menggunakan cahaya matahari, air, dan karbon dioksida?",
+
+                options: [
+
+                    "Respirasi",
+
+                    "Transpirasi",
+
+                    "Fotosintesis",
+
+                    "Penyerbukan"
+
+                ],
+
+                correct: 2,
+
+                explanation: "Fotosintesis menghasilkan glukosa (makanan) dan membebaskan oksigen yang penting untuk kehidupan organisma lain."
+
+            },
+
+            {
+
+                id: 11,
+
+                category: "Kebudayaan & Warisan",
+
+                question: "Apakah alat muzik tradisional masyarakat Melayu yang diperbuat daripada kayu dan kulit haiwan, sering digunakan dalam persembahan Dikir Barat dan Kompang?",
+
+                options: [
+
+                    "Gamelan",
+
+                    "Rebana",
+
+                    "Sompoton",
+
+                    "Sape"
+
+                ],
+
+                correct: 1,
+
+                explanation: "Rebana ialah gendang satu muka yang menjadi simbol muzik tradisional Melayu dan digunakan dalam pelbagai acara rasmi serta kebudayaan."
+
+            },
+
+            {
+
+                id: 12,
+
+                category: "Geografi & Alam Sekitar",
+
+                question: "Selat yang menjadi laluan perkapalan terpenting dan terpanjang di dunia yang memisahkan Semenanjung Malaysia dan Pulau Sumatera ialah...",
+
+                options: [
+
+                    "Selat Sunda",
+
+                    "Selat Melaka",
+
+                    "Selat Johor",
+
+                    "Selat Lombok"
+
+                ],
+
+                correct: 1,
+
+                explanation: "Selat Melaka menghubungkan Lautan Hindi dan Laut China Selatan, menjadikannya salah satu laluan perdagangan tersibuk di dunia sejak zaman Kesultanan Melayu Melaka."
+
+            },
+
+            {
+
+                id: 13,
+
+                category: "Sejarah & Pentadbiran",
+
+                question: "Bahasa Melayu telah ditetapkan sebagai Bahasa Kebangsaan Malaysia berdasarkan perkara berapakah dalam Perlembagaan Persekutuan?",
+
+                options: [
+
+                    "Perkara 152",
+
+                    "Perkara 153",
+
+                    "Perkara 10",
+
+                    "Perkara 3"
+
+                ],
+
+                correct: 0,
+
+                explanation: "Perkara 152 Perlembagaan Persekutuan menetapkan Bahasa Melayu sebagai bahasa rasmi dan bahasa kebangsaan negara."
+
+            },
+
+            {
+
+                id: 14,
+
+                category: "Sains & Teknologi",
+
+                question: "Apakah agensi kerajaan yang bertanggungjawab dalam membuat ramalan cuaca, amaran ribut, dan pemantauan gempa bumi di Malaysia?",
+
+                options: [
+
+                    "MNS (Persatuan Pencinta Alam)",
+
+                    "METMalaysia (Jabatan Meteorologi Malaysia)",
+
+                    "JAS (Jabatan Alam Sekitar)",
+
+                    "USM (Universiti Sains Malaysia)"
+
+                ],
+
+                correct: 1,
+
+                explanation: "Jabatan Meteorologi Malaysia (METMalaysia) di bawah NRECC bertanggungjawab menyebarkan maklumat cuaca dan amaran bencana alam."
+
+            },
+
+            {
+
+                id: 15,
+
+                category: "Kebudayaan & Warisan",
+
+                question: "Seni pertahanan diri tradisional masyarakat Melayu yang mengandungi gerakan bunga dan buah dinamakan...",
+
+                options: [
+
+                    "Taekwondo",
+
+                    "Karate",
+
+                    "Silat",
+
+                    "Judo"
+
+                ],
+
+                correct: 2,
+
+                explanation: "Seni Silat diiktiraf oleh UNESCO sebagai Warisan Kebudayaan Tak Ketara Kemanusiaan pada tahun 2019."
+
+            },
+
+            {
+
+                id: 16,
+
+                category: "Sejarah & Pentadbiran",
+
+                question: "Badan yang bertanggungjawab menguruskan pendaftaran pemilih dan menjalankan pilihan raya di Malaysia ialah...",
+
+                options: [
+
+                    "Suruhanjaya Hak Asasi Manusia (SUHAKAM)",
+
+                    "Suruhanjaya Pilihan Raya (SPR)",
+
+                    "Suruhanjaya Perkhidmatan Awam (SPA)",
+
+                    "Jabatan Pendaftaran Negara (JPN)"
+
+                ],
+
+                correct: 1,
+
+                explanation: "Suruhanjaya Pilihan Raya (SPR) ditubuhkan pada 4 September 1957 untuk menjamin pilihan raya yang adil dan telus."
+
+            },
+
+            {
+
+                id: 17,
+
+                category: "Geografi & Alam Sekitar",
+
+                question: "Apakah nama pulau terbesar di Malaysia yang terletak di negeri Sabah dan terkenal dengan keindahan terumbu karang serta aktiviti menyelam skuba?",
+
+                options: [
+
+                    "Pulau Langkawi",
+
+                    "Pulau Tioman",
+
+                    "Pulau Sipadan",
+
+                    "Pulau Pangkor"
+
+                ],
+
+                correct: 2,
+
+                explanation: "Pulau Sipadan di Sabah diiktiraf sebagai salah satu tapak menyelam skuba terbaik di dunia dengan kepelbagaian hidupan marin."
+
+            },
+
+            {
+
+                id: 18,
+
+                category: "Sains & Alam Sekitar",
+
+                question: "Apakah haiwan mamalia endemik Borneo yang terkenal dengan hidung besar pada jantan dan berstatus terancam?",
+
+                options: [
+
+                    "Monyet Belanda (Proboscis Monkey)",
+
+                    "Harimau Malaya",
+
+                    "Badak Sumbu Sumatran",
+
+                    "Tapir Malaya"
+
+                ],
+
+                correct: 0,
+
+                explanation: "Monyet Belanda (Proboscis Monkey) hanya ditemui di hutan bakau dan pesisir pantai pulau Borneo."
+
+            },
+
+            {
+
+                id: 19,
+
+                category: "Sejarah & Pentadbiran",
+
+                question: "Lagu Kebangsaan Malaysia 'Negaraku' meminjam melodi daripada lagu negeri...",
+
+                options: [
+
+                    "Johor (Lagu Bangsa Johor)",
+
+                    "Perak (Terang Bulan)",
+
+                    "Selangor (Duli Yang Maha Mulia)",
+
+                    "Kedah (Allah Selamat Sultan)"
+
+                ],
+
+                correct: 1,
+
+                explanation: "Melodi 'Negaraku' gubahan berdasarkan lagu rasmi negeri Perak iaitu 'Terang Bulan' yang dipersetujui oleh Jawatankuasa Pemilihan Lagu Kebangsaan pada 1957."
+
+            },
+
+            {
+
+                id: 20,
+
+                category: "Sukan & Tokoh",
+
+                question: "Atlet basikal trek negara yang mendapat gelaran 'The Pocket Rocketman' dan memenangi pingat perak Olimpik Tokyo 2020 ialah...",
+
+                options: [
+
+                    "Datuk Pandelela Rinong",
+
+                    "Datuk Azizulhasni Awang",
+
+                    "Khairul Anuar Mohamad",
+
+                    "Ng Eain Yow"
+
+                ],
+
+                correct: 1,
+
+                explanation: "Datuk Azizulhasni Awang menjadi pelumba basikal trek elit kebangsaan yang mengharumkan nama Malaysia di pentas dunia."
+
+            },
+
+            {
+
+                id: 21,
+
+                category: "Inovasi & Infrastruktur",
+
+                question: "Jambatan terpanjang di Malaysia dan Asia Tenggara yang menghubungkan Batu Kawan di tanah besar dengan Batu Maung di Pulau Pinang dikenali sebagai...",
+
+                options: [
+
+                    "Jambatan Pulau Pinang Pertama",
+
+                    "Jambatan Sultan Abdul Halim Mu'adzam Shah",
+
+                    "Jambatan Johor-Singapura",
+
+                    "Jambatan Seri Wawasan"
+
+                ],
+
+                correct: 1,
+
+                explanation: "Jambatan Sultan Abdul Halim Mu'adzam Shah (Jambatan Kedua Pulau Pinang) mempunyai panjang keseluruhan 24 km."
+
+            },
+
+            {
+
+                id: 22,
+
+                category: "Kebudayaan & Warisan",
+
+                question: "Dua buah bandar bersejarah di Malaysia yang diiktiraf bersama sebagai Tapak Warisan Dunia UNESCO pada tahun 2008 ialah...",
+
+                options: [
+
+                    "Kuala Lumpur dan Putrajaya",
+
+                    "Melaka dan George Town",
+
+                    "Ipoh dan Taiping",
+
+                    "Kuching dan Kota Kinabalu"
+
+                ],
+
+                correct: 1,
+
+                explanation: "Melaka dan George Town diiktiraf kerana kepelbagaian warisan seni bina dan budaya hasil perdagangan Timur dan Barat."
+
+            },
+
+            {
+
+                id: 23,
+
+                category: "Sains & Alam Sekitar",
+
+                question: "Gas manakah yang paling banyak membentuk atmosfera planet Bumi (kira-kira 78%)?",
+
+                options: [
+
+                    "Oksigen",
+
+                    "Karbon Dioksida",
+
+                    "Nitrogen",
+
+                    "Argon"
+
+                ],
+
+                correct: 2,
+
+                explanation: "Atmosfera Bumi terdiri daripada 78% Nitrogen, 21% Oksigen, dan 1% gas-gas lain seperti argon dan karbon dioksida."
+
+            },
+
+            {
+
+                id: 24,
+
+                category: "Sejarah & Pentadbiran",
+
+                question: "Berapakah jumlah negeri dan Wilayah Persekutuan di dalam Persekutuan Malaysia?",
+
+                options: [
+
+                    "12 Negeri dan 2 Wilayah Persekutuan",
+
+                    "13 Negeri dan 3 Wilayah Persekutuan",
+
+                    "14 Negeri dan 1 Wilayah Persekutuan",
+
+                    "11 Negeri dan 3 Wilayah Persekutuan"
+
+                ],
+
+                correct: 1,
+
+                explanation: "Malaysia terdiri daripada 13 buah negeri dan 3 Wilayah Persekutuan (Kuala Lumpur, Labuan, dan Putrajaya)."
+
+            },
+
+            {
+
+                id: 25,
+
+                category: "Kebudayaan & Sukan",
+
+                question: "Permainan tradisional Wau paling popular di negeri pantai timur Penanjung Malaysia iaitu...",
+
+                options: [
+
+                    "Pahang",
+
+                    "Kelantan",
+
+                    "Perlis",
+
+                    "Melaka"
+
+                ],
+
+                correct: 1,
+
+                explanation: "Wau Bulan dan Wau Kucing amat terkenal di Kelantan dan menjadi simbol kebudayaan wau kebangsaan."
+
+            },
+
+            {
+
+                id: 26,
+
+                category: "Sains & Teknologi",
+
+                question: "Sumber tenaga yang boleh diperbaharui, tidak mencemarkan udara, dan dijana menggunakan panel khas daripada cahaya matahari ialah...",
+
+                options: [
+
+                    "Tenaga Arang Batu",
+
+                    "Tenaga Nuklear",
+
+                    "Tenaga Suria (Solar)",
+
+                    "Tenaga Petroleum"
+
+                ],
+
+                correct: 2,
+
+                explanation: "Tenaga Suria menukar tenaga cahaya matahari secara terus kepada tenaga elektrik melalui sel fotovolta."
+
+            },
+
+            {
+
+                id: 27,
+
+                category: "Geografi & Alam Sekitar",
+
+                question: "Taman Negara yang tertua di Malaysia ditubuhkan pada tahun 1938/1939 merangkumi tiga buah negeri iaitu Pahang, Kelantan, dan...",
+
+                options: [
+
+                    "Terengganu",
+
+                    "Perak",
+
+                    "Johor",
+
+                    "Kedah"
+
+                ],
+
+                correct: 0,
+
+                explanation: "Taman Negara (dahulunya dikenali sebagai Taman Negara King George V) terletak di sempadan Pahang, Kelantan, dan Terengganu."
+
+            },
+
+            {
+
+                id: 28,
+
+                category: "Sejarah & Pentadbiran",
+
+                question: "Mata wang rasmi negara Malaysia dinamakan sebagai Ringgit Malaysia (MYR). Apakah simbol rasmi yang digunakan?",
+
+                options: [
+
+                    "RM",
+
+                    "$",
+
+                    "RP",
+
+                    "MY$"
+
+                ],
+
+                correct: 0,
+
+                explanation: "Simbol rasmi bagi Ringgit Malaysia ialah 'RM' yang diguna pakai secara meluas menggantikan '$' sejak tahun 1993."
+
+            },
+
+            {
+
+                id: 29,
+
+                category: "Sains & Angkasa",
+
+                question: "Siapakah Angkasawan Negara Malaysia yang pertama yang telah berlepas ke Stesen Angkasa Antarabangsa (ISS) pada 10 Oktober 2007?",
+
+                options: [
+
+                    "Mejar Dr. Faiz Khaleed",
+
+                    "Dato' Dr. Sheikh Muszaphar Shukor",
+
+                    "Tan Sri Bernard Giluk Dompok",
+
+                    "Dato' Seri Anwar Ibrahim"
+
+                ],
+
+                correct: 1,
+
+                explanation: "Dato' Dr. Sheikh Muszaphar Shukor mencatat sejarah sebagai angkasawan pertama Malaysia menaiki roket Soyuz TMA-11."
+
+            },
+
+            {
+
+                id: 30,
+
+                category: "Kebudayaan & Pentadbiran",
+
+                question: "Tarian Canggung merupakan tarian tradisional yang sangat popular dan menjadi identiti kebudayaan negeri...",
+
+                options: [
+
+                    "Perlis",
+
+                    "Negeri Sembilan",
+
+                    "Sarawak",
+
+                    "Sabah"
+
+                ],
+
+                correct: 0,
+
+                explanation: "Tarian Canggung berasal dari negeri Perlis dan lazimnya dipersembahkan semasa majlis perkahwinan atau pesta tuai padi."
+
+            }
+
+        ];
+
+
+
+        /* ==========================================================================
+
+           LOGIK APLIKASI & PENGURUSAN STATE KUIZ
+
+           ========================================================================== */
+
+        let currentQIndex = 0;
+
+        let score = 0;
+
+        let timerSeconds = 0;
+
+        let timerInterval = null;
+
+
+
+        // Menyimpan rekod jawapan murid bagi setiap soalan
+
+        // Format: { attempts: 0/1/2, selected: index, status: 'unattempted'|'correct_1'|'correct_2'|'failed' }
+
+        const userState = pkskQuestions.map(() => ({
+
+            attempts: 0,
+
+            selected: null,
+
+            status: 'unattempted',
+
+            locked: false
+
+        }));
+
+
+
+        window.addEventListener('DOMContentLoaded', () => {
+
+            startTimer();
+
+            renderQuestion();
+
+            renderGrid();
+
+        });
+
+
+
+        function startTimer() {
+
+            clearInterval(timerInterval);
+
+            timerInterval = setInterval(() => {
+
+                timerSeconds++;
+
+                const mins = String(Math.floor(timerSeconds / 60)).padStart(2, '0');
+
+                const secs = String(timerSeconds % 60).padStart(2, '0');
+
+                document.getElementById('timerDisplay').innerText = `${mins}:${secs}`;
+
+            }, 1000);
+
+        }
+
+
+
+        function toggleSound() {
+
+            soundFX.enabled = !soundFX.enabled;
+
+            const icon = document.getElementById('soundIcon');
+
+            const text = document.getElementById('soundText');
+
+            if (soundFX.enabled) {
+
+                icon.className = 'fa-solid fa-volume-high text-sky-300';
+
+                text.innerText = 'Bunyi: On';
+
+            } else {
+
+                icon.className = 'fa-solid fa-volume-xmark text-slate-400';
+
+                text.innerText = 'Bunyi: Off';
+
+            }
+
+        }
+
+
+
+        function renderQuestion() {
+
+            const q = pkskQuestions[currentQIndex];
+
+            const state = userState[currentQIndex];
+
+
+
+            // Kemaskini Header & Statistik
+
+            document.getElementById('currentQNumText').innerText = currentQIndex + 1;
+
+            document.getElementById('categoryBadge').innerHTML = `<i class="fa-solid fa-tag text-indigo-500"></i> ${q.category}`;
+
+            // Kemaskini Progress Bar
+
+            const progressPct = ((currentQIndex + 1) / pkskQuestions.length) * 100;
+
+            document.getElementById('progressBar').style.width = `${progressPct}%`;
+
+            document.getElementById('liveScoreText').innerText = calculateTotalScore();
+
+
+
+            // Lencana percubaan
+
+            const attemptBadge = document.getElementById('attemptBadge');
+
+            if (state.locked) {
+
+                attemptBadge.className = "inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-700 border border-slate-200";
+
+                attemptBadge.innerHTML = `<i class="fa-solid fa-lock text-slate-500"></i> Soalan Selesai`;
+
+            } else if (state.attempts === 1) {
+
+                attemptBadge.className = "inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-orange-100 text-orange-800 border border-orange-300 animate-pulse";
+
+                attemptBadge.innerHTML = `<i class="fa-solid fa-triangle-exclamation text-orange-600"></i> Percubaan 2 (Peluang Terakhir!)`;
+
+            } else {
+
+                attemptBadge.className = "inline-flex items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200";
+
+                attemptBadge.innerHTML = `<i class="fa-solid fa-rotate-right text-amber-500"></i> Percubaan 1 daripada 2`;
+
+            }
+
+
+
+            // Teks Soalan
+
+            document.getElementById('questionText').innerText = `${q.id}. ${q.question}`;
+
+
+
+            // Pilihan Jawapan A, B, C, D
+
+            const container = document.getElementById('optionsContainer');
+
+            container.innerHTML = '';
+
+
+
+            const optionLabels = ['A', 'B', 'C', 'D'];
+
+
+
+            q.options.forEach((opt, idx) => {
+
+                const btn = document.createElement('button');
+
+                btn.className = getOptionStyle(idx, q.correct, state);
+
+                btn.disabled = state.locked;
+
+                btn.onclick = () => handleOptionSelect(idx);
+
+
+
+                btn.innerHTML = `
+
+                    <div class="flex items-center gap-3 w-full">
+
+                        <span class="w-8 h-8 rounded-lg flex items-center justify-center font-bold text-xs shrink-0 ${getOptionLetterStyle(idx, q.correct, state)}">
+
+                            ${optionLabels[idx]}
+
+                        </span>
+
+                        <span class="text-xs sm:text-sm text-left flex-grow font-medium leading-snug">${opt}</span>
+
+                        <div class="shrink-0">
+
+                            ${getOptionIcon(idx, q.correct, state)}
+
+                        </div>
+
+                    </div>
+
+                `;
+
+                container.appendChild(btn);
+
+            });
+
+
+
+            // Sembunyikan/Tunjukkan Banner Maklum Balas
+
+            renderFeedbackBox(q, state);
+
+
+
+            // Navigasi Butang
+
+            document.getElementById('prevBtn').disabled = currentQIndex === 0;
+
+            const nextBtn = document.getElementById('nextBtn');
+
+            const finishBtn = document.getElementById('finishBtn');
+
+            const retryBtn = document.getElementById('retryBtn');
+
+
+
+            // Butang "Cuba Lagi" jika gagal di Percubaan 1
+
+            if (state.attempts === 1 && !state.locked) {
+
+                retryBtn.classList.remove('hidden');
+
+            } else {
+
+                retryBtn.classList.add('hidden');
+
+            }
+
+
+
+            if (currentQIndex === pkskQuestions.length - 1) {
+
+                nextBtn.classList.add('hidden');
+
+                finishBtn.classList.remove('hidden');
+
+            } else {
+
+                nextBtn.classList.remove('hidden');
+
+                finishBtn.classList.add('hidden');
+
+            }
+
+        }
+
+
+
+        function getOptionStyle(idx, correctIdx, state) {
+
+            const base = "option-btn w-full p-3.5 rounded-xl border text-left flex items-center justify-between ";
+
+            if (!state.locked) {
+
+                if (state.attempts === 1 && state.selected === idx) {
+
+                    return base + "bg-rose-50 border-rose-300 text-rose-900"; // Pilihan salah di percubaan 1
+
+                }
+
+                return base + "bg-white border-slate-200 hover:border-sky-400 hover:bg-sky-50/50 text-slate-800 shadow-sm";
+
+            }
+
+
+
+            // Jika soalan sudah terkunci (selesai)
+
+            if (idx === correctIdx) {
+
+                return base + "bg-emerald-50 border-emerald-400 text-emerald-900 font-semibold shadow-sm";
+
+            }
+
+            if (state.selected === idx && idx !== correctIdx) {
+
+                return base + "bg-rose-50 border-rose-300 text-rose-800 opacity-80";
+
+            }
+
+            return base + "bg-slate-50 border-slate-200 text-slate-400 opacity-60";
+
+        }
+
+
+
+        function getOptionLetterStyle(idx, correctIdx, state) {
+
+            if (!state.locked) {
+
+                if (state.attempts === 1 && state.selected === idx) {
+
+                    return "bg-rose-200 text-rose-800";
+
+                }
+
+                return "bg-slate-100 text-slate-600 border border-slate-200";
+
+            }
+
+
+
+            if (idx === correctIdx) {
+
+                return "bg-emerald-500 text-white shadow";
+
+            }
+
+            if (state.selected === idx && idx !== correctIdx) {
+
+                return "bg-rose-500 text-white";
+
+            }
+
+            return "bg-slate-200 text-slate-500";
+
+        }
+
+
+
+        function getOptionIcon(idx, correctIdx, state) {
+
+            if (!state.locked) return '';
+
+            if (idx === correctIdx) {
+
+                return '<i class="fa-solid fa-circle-check text-emerald-600 text-lg"></i>';
+
+            }
+
+            if (state.selected === idx && idx !== correctIdx) {
+
+                return '<i class="fa-solid fa-circle-xmark text-rose-500 text-lg"></i>';
+
+            }
+
+            return '';
+
+        }
+
+
+
+        function handleOptionSelect(optionIndex) {
+
+            const state = userState[currentQIndex];
+
+            const q = pkskQuestions[currentQIndex];
+
+
+
+            if (state.locked) return;
+
+
+
+            state.attempts++;
+
+            state.selected = optionIndex;
+
+
+
+            // Percubaan Betul (Sama ada kali ke-1 atau ke-2)
+
+            if (optionIndex === q.correct) {
+
+                state.locked = true;
+
+                state.status = (state.attempts === 1) ? 'correct_1' : 'correct_2';
+
+                soundFX.playApplause(); // Bunyi Tepukan
+
+            } else {
+
+                // Percubaan Salah
+
+                soundFX.playBuzz(); // Bunyi Tet (Buzz)
+
+
+
+                if (state.attempts >= 2) {
+
+                    state.locked = true;
+
+                    state.status = 'failed';
+
+                }
+
+            }
+
+
+
+            renderQuestion();
+
+            renderGrid();
+
+        }
+
+
+
+        function retryCurrentQuestion() {
+
+            // Pengguna menekan "Cuba Lagi Sekali"
+
+            renderQuestion();
+
+        }
+
+
+
+        function renderFeedbackBox(q, state) {
+
+            const feedbackBox = document.getElementById('feedbackBox');
+
+            const iconBox = document.getElementById('feedbackIconBox');
+
+            const icon = document.getElementById('feedbackIcon');
+
+            const title = document.getElementById('feedbackTitle');
+
+            const msg = document.getElementById('feedbackMessage');
+
+            const expContainer = document.getElementById('explanationContainer');
+
+            const expText = document.getElementById('explanationText');
+
+
+
+            if (state.attempts === 0) {
+
+                feedbackBox.classList.add('hidden');
+
+                return;
+
+            }
+
+
+
+            feedbackBox.classList.remove('hidden');
+
+
+
+            // 1. Jawapan Betul
+
+            if (state.selected === q.correct) {
+
+                feedbackBox.className = "rounded-xl p-4 sm:p-5 border animate-pop-in mb-4 bg-emerald-50 border-emerald-200 text-emerald-950";
+
+                iconBox.className = "p-2.5 rounded-xl bg-emerald-500 text-white shrink-0 shadow-sm";
+
+                icon.className = "fa-solid fa-face-smile text-xl";
+
+                if (state.attempts === 1) {
+
+                    title.innerText = "Syabas! Jawapan Tepat pada Percubaan Pertama!";
+
+                    msg.innerText = "Tahniah, anda mendapat markah penuh bagi soalan ini.";
+
+                } else {
+
+                    title.innerText = "Tahniah! Jawapan Anda Betul pada Percubaan Kedua!";
+
+                    msg.innerText = "Bagus kerana berusaha cuba lagi hingga berjaya.";
+
+                }
+
+
+
+                expContainer.classList.remove('hidden');
+
+                expText.innerText = q.explanation;
+
+                return;
+
+            }
+
+
+
+            // 2. Jawapan Salah pada Percubaan Pertama (Boleh cuba lagi sekali)
+
+            if (state.attempts === 1 && !state.locked) {
+
+                feedbackBox.className = "rounded-xl p-4 sm:p-5 border animate-pop-in mb-4 bg-amber-50 border-amber-300 text-amber-950";
+
+                iconBox.className = "p-2.5 rounded-xl bg-amber-500 text-white shrink-0 shadow-sm";
+
+                icon.className = "fa-solid fa-triangle-exclamation text-xl";
+
+
+
+                title.innerText = "Jawapan Kurang Tepat! (Bunyi Tet)";
+
+                msg.innerText = "Jangan risau, anda mempunyai 1 lagi peluang untuk mencuba. Sila pilih jawapan yang lain.";
+
+                expContainer.classList.add('hidden');
+
+                return;
+
+            }
+
+
+
+            // 3. Jawapan Salah pada Percubaan Kedua (Terkunci)
+
+            if (state.locked && state.selected !== q.correct) {
+
+                feedbackBox.className = "rounded-xl p-4 sm:p-5 border animate-pop-in mb-4 bg-rose-50 border-rose-200 text-rose-950";
+
+                iconBox.className = "p-2.5 rounded-xl bg-rose-500 text-white shrink-0 shadow-sm";
+
+                icon.className = "fa-solid fa-circle-xmark text-xl";
+
+
+
+                title.innerText = "Jawapan Masih Salah! (Jawapan Betul Didedahkan)";
+
+                msg.innerHTML = `Jawapan yang betul ialah pilihan <strong class="underline">${['A','B','C','D'][q.correct]}: ${q.options[q.correct]}</strong>.`;
+
+                expContainer.classList.remove('hidden');
+
+                expText.innerText = q.explanation;
+
+            }
+
+        }
+
+
+
+        function calculateTotalScore() {
+
+            let total = 0;
+
+            userState.forEach(s => {
+
+                if (s.status === 'correct_1') total += 1;
+
+                else if (s.status === 'correct_2') total += 0.5; // Diberi separuh markah jika betul percubaan kedua
+
+            });
+
+            return total;
+
+        }
+
+
+
+        function navigateQuestion(direction) {
+
+            const newIndex = currentQIndex + direction;
+
+            if (newIndex >= 0 && newIndex < pkskQuestions.length) {
+
+                currentQIndex = newIndex;
+
+                renderQuestion();
+
+            }
+
+        }
+
+
+
+        function toggleGridModal() {
+
+            const modal = document.getElementById('gridModal');
+
+            modal.classList.toggle('hidden');
+
+        }
+
+
+
+        function renderGrid() {
+
+            const container = document.getElementById('questionGridContainer');
+
+            container.innerHTML = '';
+
+
+
+            pkskQuestions.forEach((q, idx) => {
+
+                const state = userState[idx];
+
+                const btn = document.createElement('button');
+
+                btn.onclick = () => {
+
+                    currentQIndex = idx;
+
+                    renderQuestion();
+
+                    toggleGridModal();
+
+                };
+
+
+
+                let style = "h-11 rounded-xl font-bold text-xs flex flex-col items-center justify-center border transition relative ";
+
+                if (idx === currentQIndex) {
+
+                    style += "ring-2 ring-sky-500 ring-offset-2 ";
+
+                }
+
+
+
+                if (state.status === 'correct_1') {
+
+                    style += "bg-emerald-500 text-white border-emerald-600 shadow-sm";
+
+                } else if (state.status === 'correct_2') {
+
+                    style += "bg-amber-500 text-white border-amber-600 shadow-sm";
+
+                } else if (state.status === 'failed') {
+
+                    style += "bg-rose-500 text-white border-rose-600 shadow-sm";
+
+                } else if (state.attempts === 1) {
+
+                    style += "bg-orange-100 text-orange-800 border-orange-300";
+
+                } else {
+
+                    style += "bg-slate-100 text-slate-700 border-slate-200 hover:bg-slate-200";
+
+                }
+
+
+
+                btn.className = style;
+
+                btn.innerHTML = `
+
+                    <span>${idx + 1}</span>
+
+                `;
+
+                container.appendChild(btn);
+
+            });
+
+        }
+
+
+
+        function showResults() {
+
+            clearInterval(timerInterval);
+
+
+
+            document.getElementById('quizCard').classList.add('hidden');
+
+            document.getElementById('resultsContainer').classList.remove('hidden');
+
+
+
+            const totalScore = calculateTotalScore();
+
+            const pct = Math.round((totalScore / pkskQuestions.length) * 100);
+
+
+
+            document.getElementById('finalScore').innerText = totalScore;
+
+            document.getElementById('finalPercentage').innerText = pct;
+
+
+
+            // Gred & Ulasan Prestasi
+
+            const gradeEl = document.getElementById('finalGrade');
+
+            if (pct >= 85) {
+
+                gradeEl.innerText = "Cemerlang (A+)";
+
+                gradeEl.className = "text-2xl font-extrabold text-emerald-700";
+
+            } else if (pct >= 70) {
+
+                gradeEl.innerText = "Kepujian (A)";
+
+                gradeEl.className = "text-2xl font-extrabold text-sky-700";
+
+            } else if (pct >= 50) {
+
+                gradeEl.innerText = "Baik (B)";
+
+                gradeEl.className = "text-2xl font-extrabold text-amber-700";
+
+            } else {
+
+                gradeEl.innerText = "Perlu Latihan Lanjut";
+
+                gradeEl.className = "text-2xl font-extrabold text-rose-700";
+
+            }
+
+
+
+            // Stat Percubaan
+
+            let c1 = 0, c2 = 0, fail = 0;
+
+            userState.forEach(s => {
+
+                if (s.status === 'correct_1') c1++;
+
+                else if (s.status === 'correct_2') c2++;
+
+                else if (s.status === 'failed') fail++;
+
+            });
+
+
+
+            document.getElementById('statFirstTry').innerText = c1;
+
+            document.getElementById('statSecondTry').innerText = c2;
+
+            document.getElementById('statFailed').innerText = fail;
+
+        }
+
+
+
+        function restartQuiz() {
+
+            // Reset Semua State
+
+            currentQIndex = 0;
+
+            timerSeconds = 0;
+
+            userState.forEach(s => {
+
+                s.attempts = 0;
+
+                s.selected = null;
+
+                s.status = 'unattempted';
+
+                s.locked = false;
+
+            });
+
+
+
+            document.getElementById('resultsContainer').classList.add('hidden');
+
+            document.getElementById('quizCard').classList.remove('hidden');
+
+
+
+            startTimer();
+
+            renderQuestion();
+
+            renderGrid();
+
+        }
+
+    </script>
+
+</body>
+
+</html>
